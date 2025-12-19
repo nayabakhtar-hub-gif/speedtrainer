@@ -1,2 +1,0 @@
-# speedtrainer
-SpeedDigits Trainer is a web-based mental math practice tool designed to improve speed and accuracy. Users can customize their practice session by selecting operations (addition, subtraction, multiplication, division, squares, cubes, last digits), difficulty levels, number of digits, and number ranges.
