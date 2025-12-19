@@ -402,3 +402,92 @@ function downloadResults(){
 </script>
 </body>
 </html>
+<!-- ===== Welcome Popup ===== -->
+<style>
+#welcomeOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#welcomeBox{
+  background:linear-gradient(180deg,#121826,#0f172a);
+  color:#e5e7eb;
+  width:90%;
+  max-width:420px;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:pop .4s ease;
+}
+@keyframes pop{
+  from{transform:scale(.9);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+#welcomeBox h2{
+  margin:0 0 8px;
+  font-size:22px;
+}
+#welcomeBox p{
+  margin:0 0 16px;
+  color:#9aa4b2;
+  font-size:14px;
+}
+#welcomeBox input,
+#welcomeBox textarea{
+  width:100%;
+  background:#0b1220;
+  border:1px solid #1f2937;
+  color:#e5e7eb;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:12px;
+  font-family:inherit;
+}
+#welcomeBox textarea{resize:none}
+#welcomeBox button{
+  width:100%;
+  background:#7c3aed;
+  border:none;
+  color:white;
+  padding:12px;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+#welcomeBox button:hover{opacity:.9}
+#welcomeFooter{
+  text-align:center;
+  margin-top:12px;
+  font-size:12px;
+  color:#9aa4b2;
+}
+</style>
+
+<div id="welcomeOverlay">
+  <div id="welcomeBox">
+    <h2>👋 I’m your personal Speed Trainer</h2>
+    <p>Please tell me a little about you</p>
+
+    <input placeholder="Your name">
+    <input placeholder="What are you excited to practice?">
+    <textarea rows="3" placeholder="Your hobbies (optional)"></textarea>
+
+    <button onclick="closeWelcome()">Let’s Start 🚀</button>
+
+    <div id="welcomeFooter">by speeddigitstrainer.net</div>
+  </div>
+</div>
+
+<script>
+function closeWelcome(){
+  document.getElementById("welcomeOverlay").style.display="none";
+}
+</script>
+<!-- ===== End Welcome Popup ===== -->
+</body>
+</html>
