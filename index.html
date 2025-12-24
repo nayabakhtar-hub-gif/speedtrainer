@@ -125,18 +125,20 @@ window.addEventListener("DOMContentLoaded", () => {
   window.login = login;
   window.logout = logout;
 
-  window.fbAuth.onAuthStateChanged(window.auth, user => {
-  if(user){
-    authSection.classList.add("hidden");
-    userBar.classList.remove("hidden");
-    config.classList.remove("hidden");   // ✅ SHOW CALCULATOR
-    userEmail.textContent = user.email;
-  }else{
-    authSection.classList.remove("hidden");
-    userBar.classList.add("hidden");
-    config.classList.add("hidden");      // ✅ HIDE CALCULATOR
-  }
-});
+ window.fbAuth.onAuthStateChanged(window.auth, user => {
+    if(user){
+      authSection.classList.add("hidden");
+      userBar.classList.remove("hidden");
+      config.classList.remove("hidden");
+      userEmail.textContent = user.email;
+    }else{
+      authSection.classList.remove("hidden");
+      userBar.classList.add("hidden");
+      config.classList.add("hidden");
+    }
+  });
+
+});   // ✅ closes DOMContentLoaded
 
 </script>
 
