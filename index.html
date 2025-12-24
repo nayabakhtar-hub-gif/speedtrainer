@@ -168,10 +168,65 @@ th,td{
 }
 .correct{color:var(--green)}
 .wrong{color:var(--red)}
+  /* ===== PERFORMANCE HUB (SIDEBAR) ===== */
+#hubToggle{
+  position:fixed;
+  top:18px;
+  left:18px;
+  font-size:22px;
+  background:#121826;
+  border:1px solid #1f2937;
+  color:#e5e7eb;
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+  z-index:1001;
+}
+
+#hub{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:240px;
+  background:linear-gradient(180deg,#121826,#0f172a);
+  border-right:1px solid #1f2937;
+  transform:translateX(-100%);
+  transition:.3s ease;
+  z-index:1000;
+  padding:20px;
+}
+
+#hub.open{ transform:translateX(0); }
+
+#hub h3{
+  margin:0 0 20px;
+  font-size:18px;
+}
+
+.hub-item{
+  padding:10px 12px;
+  border-radius:8px;
+  margin-bottom:6px;
+  cursor:pointer;
+  color:#e5e7eb;
+}
+.hub-item:hover{ background:#1f2937; }
+
 </style>
 </head>
 
 <body>
+  <button id="hubToggle">☰</button>
+
+<div id="hub">
+  <h3>⚡ Performance Hub</h3>
+
+  <div class="hub-item" data-target="config">🧮 Calculator</div>
+  <div class="hub-item" data-target="profile">👤 Profile</div>
+  <div class="hub-item" data-target="history">📜 Test History</div>
+  <div class="hub-item" data-target="analysis">📊 Analysis</div>
+  <div class="hub-item" id="resetApp">🚪 Logout</div>
+</div>
+
 <div class="container">
 
 <!-- CONFIG PAGE -->
@@ -382,7 +437,20 @@ function finish(){
     </tr>`;
   });
 }
+  // ===== PERFORMANCE HUB BASIC TOGGLE =====
+hubToggle.onclick = () => {
+  hub.classList.toggle("open");
+};
+
+// temporary logout (step 1 only)
+resetApp.onclick = () => {
+  if(confirm("This will clear all saved data. Continue?")){
+    localStorage.clear();
+    location.reload();
+  }
+};
 </script>
 
 </body>
 </html>
+
