@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ================= ORIGINAL CSS (UNCHANGED) ================= */
 :root{
   --bg:#0e1625;
   --card:#121826;
@@ -82,103 +81,98 @@ button{
 button:hover{opacity:.9}
 .hidden{display:none}
 
-/* ================= SIDEBAR CSS (ADDED) ================= */
-#sdSidebarToggle{
-  position:fixed;
-  top:14px;
-  left:14px;
-  z-index:1000;
-  font-size:22px;
-  padding:10px 14px;
-  border-radius:10px;
-  background:var(--accent);
-  color:#fff;
-  cursor:pointer;
-}
-
-#sdSidebar{
-  position:fixed;
-  top:0;
-  left:-280px;
-  width:260px;
-  height:100%;
-  background:linear-gradient(180deg,#121826,#0f172a);
-  box-shadow:4px 0 30px rgba(0,0,0,.6);
-  padding:18px;
-  overflow-y:auto;
-  transition:.35s ease;
-  z-index:999;
-}
-#sdSidebar.open{left:0}
-
-.sd-section{
-  margin-bottom:20px;
-  border-bottom:1px solid #1f2937;
-  padding-bottom:14px;
-}
-.sd-section h3{font-size:16px}
-
-.sd-section input,
-.sd-section textarea,
-.sd-section select{
-  width:100%;
+/* TEST PAGE */
+.test-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   margin-bottom:10px;
-  padding:10px;
-  border-radius:10px;
+  color:var(--muted);
+}
+.progress{
+  height:6px;
+  background:#1f2937;
+  border-radius:6px;
+  overflow:hidden;
+}
+.progress div{
+  height:100%;
+  width:0%;
+  background:var(--accent);
+}
+.question-box{
+  margin:30px auto;
   background:#0b1220;
-  border:1px solid #1f2937;
-  color:#e5e7eb;
+  border-radius:14px;
+  padding:20px 30px;
+  text-align:center;
+  font-size:28px;
+  font-weight:700;
+  max-width:400px;
 }
-.sd-img{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  object-fit:cover;
+.answer{
+  width:300px;
   display:block;
-  margin:10px auto;
-  border:2px solid var(--accent);
+  margin:20px auto 0 auto;
+  font-size:16px;
+  padding:12px;
 }
-.sd-danger{background:var(--red)}
-.sd-history-item{
-  font-size:12px;
-  border-bottom:1px dashed #1f2937;
-  padding:6px 0;
+.submit-row{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  justify-content:center;
 }
+.submit{
+  flex:1;
+  font-size:18px;
+  max-width:200px;
+}
+.end-btn{
+  width:44px;
+  background:#1f2937;
+}
+.blink-green{animation:greenBlink .4s}
+.blink-red{animation:redBlink .4s}
+@keyframes greenBlink{
+  50%{box-shadow:0 0 20px var(--green)}
+}
+@keyframes redBlink{
+  50%{box-shadow:0 0 20px var(--red)}
+}
+
+/* ANALYSIS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+  margin-top:20px;
+}
+.stat{
+  background:#0b1220;
+  padding:16px;
+  border-radius:12px;
+  text-align:center;
+}
+.stat h2{margin:0;font-size:22px}
+.stat p{margin:4px 0 0;color:var(--muted)}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #1f2937;
+  font-size:14px;
+}
+.correct{color:var(--green)}
+.wrong{color:var(--red)}
 </style>
 </head>
 
 <body>
-
-<!-- ================= SIDEBAR HTML (ADDED) ================= -->
-<button id="sdSidebarToggle">☰</button>
-
-<div id="sdSidebar">
-  <div class="sd-section">
-    <h3>👤 Profile</h3>
-    <input id="sdName" placeholder="Name">
-    <input id="sdAge" placeholder="Age">
-    <input id="sdClass" placeholder="Class">
-    <input type="file" id="sdImage">
-    <img id="sdPreview" class="sd-img">
-    <textarea id="sdBio" placeholder="Bio / Hobbies"></textarea>
-    <button onclick="sdSaveProfile()">Save Profile</button>
-  </div>
-
-  <div class="sd-section">
-    <h3>📊 Test History</h3>
-    <div id="sdHistory">No tests yet</div>
-  </div>
-
-  <div class="sd-section">
-    <button class="sd-danger" onclick="sdResetAll()">Reset Everything</button>
-  </div>
-</div>
-
-<!-- ================= ORIGINAL BODY (UNCHANGED) ================= -->
 <div class="container">
-<!-- ORIGINAL CONTENT CONTINUES -->
-<!-- (your calculator UI exactly as provided) -->
-<!-- ================= ORIGINAL CONTENT CONTINUES (UNCHANGED) ================= -->
 
 <!-- CONFIG PAGE -->
 <div id="config">
@@ -294,8 +288,6 @@ button:hover{opacity:.9}
 </div>
 
 <script>
-/* ================= ORIGINAL CALCULATOR JS (UNCHANGED) ================= */
-
 let q=0,total=0,correct=0,timer,sec=0,log=[];
 const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
 
@@ -390,59 +382,189 @@ function finish(){
     </tr>`;
   });
 }
+</script>
 
-/* ================= SIDEBAR JS (ADDED SAFELY) ================= */
+  <!-- ================= SIDEBAR : COMPLETE ADD-ON ================= -->
 
-/* TOGGLE */
-sdSidebarToggle.onclick=()=>sdSidebar.classList.toggle("open");
+<!-- TOGGLE BUTTON -->
+<button id="sbToggle">☰</button>
 
-/* PROFILE */
-function sdSaveProfile(){
-  localStorage.setItem("sdProfile",JSON.stringify({
-    name:sdName.value,
-    age:sdAge.value,
-    class:sdClass.value,
-    bio:sdBio.value,
-    img:sdPreview.src
-  }));
-  alert("Profile saved");
+<!-- SIDEBAR -->
+<div id="sbSidebar">
+
+  <div class="sb-btn" onclick="sbOpen('profile')">👤 Profile</div>
+  <div class="sb-btn" onclick="sbOpen('history')">📊 Test History</div>
+  <div class="sb-btn" onclick="sbOpen('analysis')">📈 Analysis</div>
+  <div class="sb-btn" onclick="sbOpen('settings')">⚙ Settings</div>
+  <div class="sb-btn danger" onclick="sbReset()">🔄 Reset</div>
+
+  <!-- PANELS -->
+  <div class="sb-panel" id="sb-profile">
+    <h3>Profile</h3>
+    <input id="sbName" placeholder="Name">
+    <input id="sbAge" placeholder="Age">
+    <input id="sbClass" placeholder="Class">
+    <textarea id="sbBio" placeholder="Bio / Hobbies"></textarea>
+    <button onclick="sbSaveProfile()">Save</button>
+  </div>
+
+  <div class="sb-panel" id="sb-history">
+    <h3>Test History</h3>
+    <div id="sbHistoryList">No tests yet</div>
+  </div>
+
+  <div class="sb-panel" id="sb-analysis">
+    <h3>Analysis</h3>
+    <p>• Correct vs Incorrect graph</p>
+    <p>• Time per test graph</p>
+    <p>(graph logic added later)</p>
+  </div>
+
+  <div class="sb-panel" id="sb-settings">
+    <h3>Settings</h3>
+    <button onclick="document.body.classList.toggle('light')">
+      Toggle Light / Dark
+    </button>
+  </div>
+
+</div>
+
+<!-- ================= SIDEBAR STYLES ================= -->
+<style>
+#sbToggle{
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:999;
+  background:var(--accent);
+  color:white;
+  border:none;
+  padding:10px 14px;
+  font-size:22px;
+  border-radius:10px;
+  cursor:pointer;
 }
 
-sdImage.onchange=()=>{
-  const r=new FileReader();
-  r.onload=()=>sdPreview.src=r.result;
-  r.readAsDataURL(sdImage.files[0]);
-};
+#sbSidebar{
+  position:fixed;
+  top:0;
+  left:-260px;
+  width:240px;
+  height:100%;
+  background:var(--card);
+  padding:16px;
+  box-shadow:4px 0 25px rgba(0,0,0,.5);
+  transition:.3s;
+  z-index:998;
+}
 
-const p=JSON.parse(localStorage.getItem("sdProfile")||"{}");
-if(p.name)sdName.value=p.name;
-if(p.age)sdAge.value=p.age;
-if(p.class)sdClass.value=p.class;
-if(p.bio)sdBio.value=p.bio;
-if(p.img)sdPreview.src=p.img;
+#sbSidebar.open{ left:0 }
 
-/* HISTORY */
-const _finish=finish;
-finish=function(){
-  _finish();
-  const h=JSON.parse(localStorage.getItem("sdHistory")||"[]");
+.sb-btn{
+  background:#1f2937;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+.sb-btn:hover{opacity:.85}
+.sb-btn.danger{background:var(--red)}
+
+.sb-panel{
+  display:none;
+  margin-top:14px;
+}
+.sb-panel h3{margin-top:0}
+
+.sb-panel input,
+.sb-panel textarea{
+  width:100%;
+  margin-bottom:8px;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#0b1220;
+  color:#e5e7eb;
+}
+
+.sb-panel button{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  background:var(--accent);
+  color:white;
+  cursor:pointer;
+}
+
+#sbHistoryList{
+  font-size:13px;
+  max-height:200px;
+  overflow:auto;
+}
+</style>
+
+<!-- ================= SIDEBAR SCRIPT ================= -->
+<script>
+const sbSidebar = document.getElementById("sbSidebar");
+sbToggle.onclick = () => sbSidebar.classList.toggle("open");
+
+function sbOpen(id){
+  document.querySelectorAll(".sb-panel")
+    .forEach(p => p.style.display="none");
+  document.getElementById("sb-"+id).style.display="block";
+}
+
+/* PROFILE STORAGE */
+function sbSaveProfile(){
+  localStorage.setItem("sbProfile", JSON.stringify({
+    name: sbName.value,
+    age: sbAge.value,
+    class: sbClass.value,
+    bio: sbBio.value
+  }));
+  alert("Profile Saved");
+}
+
+const p = JSON.parse(localStorage.getItem("sbProfile")||"{}");
+sbName.value = p.name||"";
+sbAge.value = p.age||"";
+sbClass.value = p.class||"";
+sbBio.value = p.bio||"";
+
+/* TEST HISTORY (basic hook – safe) */
+const oldFinish = finish;
+finish = function(){
+  oldFinish();
+  const h = JSON.parse(localStorage.getItem("sbHistory")||"[]");
   h.push({
-    date:new Date().toLocaleString(),
-    test:testName.value||"Practice",
-    score:`${correct}/${total}`
+    date: new Date().toLocaleString(),
+    score: correct+"/"+total
   });
-  localStorage.setItem("sdHistory",JSON.stringify(h));
-  sdHistory.innerHTML=h.map(x=>`<div class="sd-history-item">${x.test}<br>${x.date}<br>${x.score}</div>`).reverse().join("");
+  localStorage.setItem("sbHistory", JSON.stringify(h));
+  sbRenderHistory();
 };
+
+function sbRenderHistory(){
+  const h = JSON.parse(localStorage.getItem("sbHistory")||"[]");
+  sbHistoryList.innerHTML = h.length
+    ? h.map(x=>`<div>${x.date}<br>${x.score}</div>`).reverse().join("<hr>")
+    : "No tests yet";
+}
+sbRenderHistory();
 
 /* RESET */
-function sdResetAll(){
-  if(confirm("Delete ALL data?")){
-    localStorage.clear();
+function sbReset(){
+  if(confirm("Delete all sidebar data?")){
+    localStorage.removeItem("sbProfile");
+    localStorage.removeItem("sbHistory");
     location.reload();
   }
 }
 </script>
+
+<!-- =============== END SIDEBAR ADD-ON =============== -->
 
 </body>
 </html>
