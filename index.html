@@ -24,6 +24,15 @@
     const app = initializeApp(firebaseConfig);
     window.auth = getAuth(app);
     window.db = getFirestore(app);
+
+    // 🔴 THIS PART IS REQUIRED
+  window.fbAuth = {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  };
+    
  </script>
 
   <style>
@@ -192,6 +201,23 @@ th,td{
 
 <body>
 <div class="container">
+  <!-- LOGIN / SIGNUP -->
+<div id="authSection" class="card">
+  <h2>🔐 Login / Sign Up</h2>
+
+  <input id="email" type="email" placeholder="Email" style="margin-bottom:10px">
+  <input id="password" type="password" placeholder="Password" style="margin-bottom:10px">
+
+  <button onclick="signup()">Create Account</button>
+  <button onclick="login()" style="background:#374151;margin-top:8px">Login</button>
+
+  <p id="authMsg" style="margin-top:10px;color:#9aa4b2"></p>
+</div>
+
+<div id="userBar" class="card hidden">
+  <p>👤 Logged in as <span id="userEmail"></span></p>
+  <button onclick="logout()" style="background:#dc2626">Logout</button>
+</div>
 
 <!-- CONFIG PAGE -->
 <div id="config">
@@ -401,8 +427,61 @@ function finish(){
     </tr>`;
   });
 }
+  // ---------- AUTH LOGIC ----------
+
+function signup(){
+  const e = email.value.trim();
+  const p = password.value.trim();
+
+  if(!e || !p){
+    authMsg.textContent = "Please fill all fields";
+    return;
+  }
+
+  fbAuth.createUserWithEmailAndPassword(auth, e, p)
+    .then(() => {
+      authMsg.textContent = "Account created successfully";
+      email.value = "";
+      password.value = "";
+    })
+    .catch(err => {
+      authMsg.textContent = err.message;
+    });
+}
+
+function login(){
+  const e = email.value.trim();
+  const p = password.value.trim();
+
+  if(!e || !p){
+    authMsg.textContent = "Please fill all fields";
+    return;
+  }
+
+  fbAuth.signInWithEmailAndPassword(auth, e, p)
+    .catch(err => {
+      authMsg.textContent = err.message;
+    });
+}
+
+function logout(){
+  fbAuth.signOut(auth);
+}
+
+fbAuth.onAuthStateChanged(auth, user => {
+  if(user){
+    authSection.classList.add("hidden");
+    userBar.classList.remove("hidden");
+    userEmail.textContent = user.email;
+  }else{
+    authSection.classList.remove("hidden");
+    userBar.classList.add("hidden");
+  }
+});
+
 </script>
 
 </body>
 </html>
+
 
