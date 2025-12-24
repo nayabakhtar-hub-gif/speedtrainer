@@ -383,84 +383,88 @@ function finish(){
   });
 }
 </script>
+<!-- ================= LEFT SIDEBAR ================= -->
+<div class="app-sidebar">
 
-  <!-- ================= SIDEBAR : COMPLETE ADD-ON ================= -->
-
-<!-- TOGGLE BUTTON -->
-<button id="sbToggle">☰</button>
-
-<!-- SIDEBAR -->
-<div id="sbSidebar">
-
-  <div class="sb-btn" onclick="sbOpen('profile')">👤 Profile</div>
-  <div class="sb-btn" onclick="sbOpen('history')">📊 Test History</div>
-  <div class="sb-btn" onclick="sbOpen('analysis')">📈 Analysis</div>
-  <div class="sb-btn" onclick="sbOpen('settings')">⚙ Settings</div>
-  <div class="sb-btn danger" onclick="sbReset()">🔄 Reset</div>
-
-  <!-- PANELS -->
-  <div class="sb-panel" id="sb-profile">
-    <h3>Profile</h3>
-    <input id="sbName" placeholder="Name">
-    <input id="sbAge" placeholder="Age">
-    <input id="sbClass" placeholder="Class">
-    <textarea id="sbBio" placeholder="Bio / Hobbies"></textarea>
-    <button onclick="sbSaveProfile()">Save</button>
+  <div class="app-title">
+    🧮 SpeedDigits
   </div>
 
-  <div class="sb-panel" id="sb-history">
-    <h3>Test History</h3>
-    <div id="sbHistoryList">No tests yet</div>
-  </div>
+  <div class="nav-btn" onclick="openPanel('profile')">👤 Profile</div>
+  <div class="nav-btn" onclick="openPanel('practice')">🧮 Practice</div>
+  <div class="nav-btn" onclick="openPanel('history')">📊 Test History</div>
+  <div class="nav-btn" onclick="openPanel('analysis')">📈 Analysis</div>
+  <div class="nav-btn" onclick="openPanel('settings')">⚙ Settings</div>
 
-  <div class="sb-panel" id="sb-analysis">
-    <h3>Analysis</h3>
-    <p>• Correct vs Incorrect graph</p>
-    <p>• Time per test graph</p>
-    <p>(graph logic added later)</p>
-  </div>
-
-  <div class="sb-panel" id="sb-settings">
-    <h3>Settings</h3>
-    <button onclick="document.body.classList.toggle('light')">
-      Toggle Light / Dark
-    </button>
-  </div>
+  <div class="nav-btn danger" onclick="resetAll()">🔄 Reset</div>
 
 </div>
 
-<!-- ================= SIDEBAR STYLES ================= -->
+<!-- ================= PANELS ================= -->
+<div class="side-panel" id="profile">
+  <h3>Profile</h3>
+  <input placeholder="Name">
+  <input placeholder="Age">
+  <input placeholder="Class">
+  <textarea placeholder="Bio / Hobbies"></textarea>
+  <button>Save Profile</button>
+</div>
+
+<div class="side-panel" id="practice">
+  <h3>Practice</h3>
+  <p>• Start new test</p>
+  <p>• Continue practice</p>
+</div>
+
+<div class="side-panel" id="history">
+  <h3>Test History</h3>
+  <p>• Previous tests list</p>
+</div>
+
+<div class="side-panel" id="analysis">
+  <h3>Analysis</h3>
+  <p>• Correct vs Incorrect graph</p>
+  <p>• Time taken graph</p>
+</div>
+
+<div class="side-panel" id="settings">
+  <h3>Settings</h3>
+  <button>Toggle Dark / Light</button>
+</div>
+
+<!-- ================= TOP RIGHT PROFILE ================= -->
+<div class="top-profile">
+  <div class="avatar" onclick="toggleProfile()">👤</div>
+
+  <div class="profile-card" id="profileCard">
+    <strong>Your Name</strong>
+    <p>Class 11 • Student</p>
+    <button>Manage Profile</button>
+    <button class="danger">Logout</button>
+  </div>
+</div>
+
+<!-- ================= STYLES ================= -->
 <style>
-#sbToggle{
+.app-sidebar{
   position:fixed;
-  top:14px;
-  left:14px;
-  z-index:999;
-  background:var(--accent);
-  color:white;
-  border:none;
-  padding:10px 14px;
-  font-size:22px;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-#sbSidebar{
-  position:fixed;
+  left:0;
   top:0;
-  left:-260px;
-  width:240px;
+  width:220px;
   height:100%;
-  background:var(--card);
+  background:#0f172a;
   padding:16px;
-  box-shadow:4px 0 25px rgba(0,0,0,.5);
-  transition:.3s;
-  z-index:998;
+  box-shadow:4px 0 30px rgba(0,0,0,.5);
+  z-index:900;
 }
 
-#sbSidebar.open{ left:0 }
+.app-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:20px;
+}
 
-.sb-btn{
+.nav-btn{
   background:#1f2937;
   padding:10px;
   border-radius:10px;
@@ -468,103 +472,101 @@ function finish(){
   cursor:pointer;
   font-weight:600;
 }
-.sb-btn:hover{opacity:.85}
-.sb-btn.danger{background:var(--red)}
+.nav-btn:hover{opacity:.85}
+.nav-btn.danger{background:#7f1d1d}
 
-.sb-panel{
+.side-panel{
+  position:fixed;
+  left:230px;
+  top:80px;
+  width:280px;
+  background:#020617;
+  padding:16px;
+  border-radius:12px;
   display:none;
-  margin-top:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+  z-index:901;
 }
-.sb-panel h3{margin-top:0}
 
-.sb-panel input,
-.sb-panel textarea{
+.side-panel input,
+.side-panel textarea{
   width:100%;
-  margin-bottom:8px;
+  margin-bottom:10px;
   padding:8px;
   border-radius:8px;
-  border:1px solid #1f2937;
+  border:1px solid #334155;
   background:#0b1220;
   color:#e5e7eb;
 }
 
-.sb-panel button{
+.side-panel button{
   width:100%;
   padding:10px;
-  border-radius:10px;
   border:none;
-  background:var(--accent);
+  border-radius:10px;
+  background:#7c3aed;
   color:white;
   cursor:pointer;
 }
 
-#sbHistoryList{
-  font-size:13px;
-  max-height:200px;
-  overflow:auto;
+.top-profile{
+  position:fixed;
+  top:16px;
+  right:20px;
+  z-index:1000;
 }
+
+.avatar{
+  background:#1f2937;
+  padding:10px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.profile-card{
+  display:none;
+  position:absolute;
+  right:0;
+  top:50px;
+  background:#020617;
+  padding:14px;
+  width:200px;
+  border-radius:12px;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+}
+
+.profile-card button{
+  width:100%;
+  margin-top:8px;
+  padding:8px;
+  border:none;
+  border-radius:8px;
+  background:#7c3aed;
+  color:white;
+}
+.profile-card .danger{background:#7f1d1d}
 </style>
 
-<!-- ================= SIDEBAR SCRIPT ================= -->
+<!-- ================= SCRIPT ================= -->
 <script>
-const sbSidebar = document.getElementById("sbSidebar");
-sbToggle.onclick = () => sbSidebar.classList.toggle("open");
-
-function sbOpen(id){
-  document.querySelectorAll(".sb-panel")
-    .forEach(p => p.style.display="none");
-  document.getElementById("sb-"+id).style.display="block";
+function openPanel(id){
+  document.querySelectorAll('.side-panel')
+    .forEach(p => p.style.display='none');
+  document.getElementById(id).style.display='block';
 }
 
-/* PROFILE STORAGE */
-function sbSaveProfile(){
-  localStorage.setItem("sbProfile", JSON.stringify({
-    name: sbName.value,
-    age: sbAge.value,
-    class: sbClass.value,
-    bio: sbBio.value
-  }));
-  alert("Profile Saved");
+function toggleProfile(){
+  const card = document.getElementById("profileCard");
+  card.style.display = card.style.display === "block" ? "none" : "block";
 }
 
-const p = JSON.parse(localStorage.getItem("sbProfile")||"{}");
-sbName.value = p.name||"";
-sbAge.value = p.age||"";
-sbClass.value = p.class||"";
-sbBio.value = p.bio||"";
-
-/* TEST HISTORY (basic hook – safe) */
-const oldFinish = finish;
-finish = function(){
-  oldFinish();
-  const h = JSON.parse(localStorage.getItem("sbHistory")||"[]");
-  h.push({
-    date: new Date().toLocaleString(),
-    score: correct+"/"+total
-  });
-  localStorage.setItem("sbHistory", JSON.stringify(h));
-  sbRenderHistory();
-};
-
-function sbRenderHistory(){
-  const h = JSON.parse(localStorage.getItem("sbHistory")||"[]");
-  sbHistoryList.innerHTML = h.length
-    ? h.map(x=>`<div>${x.date}<br>${x.score}</div>`).reverse().join("<hr>")
-    : "No tests yet";
-}
-sbRenderHistory();
-
-/* RESET */
-function sbReset(){
-  if(confirm("Delete all sidebar data?")){
-    localStorage.removeItem("sbProfile");
-    localStorage.removeItem("sbHistory");
+function resetAll(){
+  if(confirm("Reset all data?")){
+    localStorage.clear();
     location.reload();
   }
 }
 </script>
-
-<!-- =============== END SIDEBAR ADD-ON =============== -->
-
 </body>
 </html>
+
