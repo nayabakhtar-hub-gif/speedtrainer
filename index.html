@@ -7,32 +7,39 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <!-- 🔥 PASTE FIREBASE CODE HERE -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB1gZFLaT_axhf9OoQsaKK_reK4pHt0Kz4",
-      authDomain: "superdigitscalculator.firebaseapp.com",
-      projectId: "superdigitscalculator",
-      storageBucket: "superdigitscalculator.firebasestorage.app",
-      messagingSenderId: "542254380602",
-      appId: "1:542254380602:web:a3dabf0ae5a8a7911be703"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyB1gZFLaT_axhf9OoQsaKK_reK4pHt0Kz4",
+    authDomain: "superdigitscalculator.firebaseapp.com",
+    projectId: "superdigitscalculator",
+    storageBucket: "superdigitscalculator.firebasestorage.app",
+    messagingSenderId: "542254380602",
+    appId: "1:542254380602:web:a3dabf0ae5a8a7911be703"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    window.auth = getAuth(app);
-    window.db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
 
-    // 🔴 THIS PART IS REQUIRED
+  window.auth = getAuth(app);
+  window.db = getFirestore(app);
+
   window.fbAuth = {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
   };
-    
+</script>
+
  </script>
 
   <style>
@@ -483,5 +490,6 @@ fbAuth.onAuthStateChanged(auth, user => {
 
 </body>
 </html>
+
 
 
