@@ -17,12 +17,6 @@
   --green:#16a34a;
   --red:#dc2626;
 }
-[data-theme="light"]{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --muted:#475569;
-}
-
 body{
   margin:0;
   font-family:Inter,system-ui;
@@ -52,105 +46,139 @@ body{
   margin-top:20px;
   box-shadow:0 20px 50px rgba(0,0,0,.45);
 }
-.hidden{display:none}
+.row{
+  display:flex;
+  gap:16px;
+  margin-bottom:16px;
+}
+.row > *{flex:1 1 0;}
+.field{margin-bottom:16px}
+.label{
+  display:block;
+  margin-bottom:6px;
+  color:#cbd5f5;
+  font-size:14px;
+}
 
-/* ================= SIDEBAR (NEW) ================= */
-#hubToggle{
-  position:fixed;
-  top:18px;left:18px;
-  font-size:22px;
-  background:#121826;
+input,select{
+  background:#0b1220;
   border:1px solid #1f2937;
   color:#e5e7eb;
+  padding:12px;
   border-radius:10px;
-  padding:8px 12px;
-  cursor:pointer;
-  z-index:1001;
-}
-#hub{
-  position:fixed;
-  top:0;left:0;bottom:0;
-  width:240px;
-  background:linear-gradient(180deg,#121826,#0f172a);
-  border-right:1px solid #1f2937;
-  transform:translateX(-100%);
-  transition:.3s ease;
-  z-index:1000;
-  padding:20px;
-}
-#hub.open{transform:translateX(0)}
-.hub-item{
-  padding:10px 12px;
-  border-radius:8px;
-  margin-bottom:6px;
-  cursor:pointer;
-}
-.hub-item:hover{background:#1f2937}
-
-table{
+  font-size:15px;
   width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
+  box-sizing:border-box;
 }
-th,td{
-  padding:8px;
+button{
+  background:var(--accent);
+  border:none;
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
+.hidden{display:none}
+
+/* ================= SIDEBAR CSS (ADDED) ================= */
+#sdSidebarToggle{
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:1000;
+  font-size:22px;
+  padding:10px 14px;
+  border-radius:10px;
+  background:var(--accent);
+  color:#fff;
+  cursor:pointer;
+}
+
+#sdSidebar{
+  position:fixed;
+  top:0;
+  left:-280px;
+  width:260px;
+  height:100%;
+  background:linear-gradient(180deg,#121826,#0f172a);
+  box-shadow:4px 0 30px rgba(0,0,0,.6);
+  padding:18px;
+  overflow-y:auto;
+  transition:.35s ease;
+  z-index:999;
+}
+#sdSidebar.open{left:0}
+
+.sd-section{
+  margin-bottom:20px;
   border-bottom:1px solid #1f2937;
-  font-size:14px;
+  padding-bottom:14px;
+}
+.sd-section h3{font-size:16px}
+
+.sd-section input,
+.sd-section textarea,
+.sd-section select{
+  width:100%;
+  margin-bottom:10px;
+  padding:10px;
+  border-radius:10px;
+  background:#0b1220;
+  border:1px solid #1f2937;
+  color:#e5e7eb;
+}
+.sd-img{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  margin:10px auto;
+  border:2px solid var(--accent);
+}
+.sd-danger{background:var(--red)}
+.sd-history-item{
+  font-size:12px;
+  border-bottom:1px dashed #1f2937;
+  padding:6px 0;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ========== SIDEBAR UI (NEW) ========== -->
-<button id="hubToggle">☰</button>
+<!-- ================= SIDEBAR HTML (ADDED) ================= -->
+<button id="sdSidebarToggle">☰</button>
 
-<div id="hub">
-  <h3>⚡ Performance Hub</h3>
-  <div class="hub-item" data-target="config">🧮 Calculator</div>
-  <div class="hub-item" data-target="profile">👤 Profile</div>
-  <div class="hub-item" data-target="history">📜 Test History</div>
-  <div class="hub-item" data-target="analysisPanel">📊 Analysis</div>
-  <div class="hub-item" data-target="settings">⚙️ Settings</div>
+<div id="sdSidebar">
+  <div class="sd-section">
+    <h3>👤 Profile</h3>
+    <input id="sdName" placeholder="Name">
+    <input id="sdAge" placeholder="Age">
+    <input id="sdClass" placeholder="Class">
+    <input type="file" id="sdImage">
+    <img id="sdPreview" class="sd-img">
+    <textarea id="sdBio" placeholder="Bio / Hobbies"></textarea>
+    <button onclick="sdSaveProfile()">Save Profile</button>
+  </div>
+
+  <div class="sd-section">
+    <h3>📊 Test History</h3>
+    <div id="sdHistory">No tests yet</div>
+  </div>
+
+  <div class="sd-section">
+    <button class="sd-danger" onclick="sdResetAll()">Reset Everything</button>
+  </div>
 </div>
 
+<!-- ================= ORIGINAL BODY (UNCHANGED) ================= -->
 <div class="container">
-
-<!-- ========== PROFILE (NEW) ========== -->
-<div id="profile" class="card hidden">
-  <div class="header">👤 Profile</div>
-  <p>Total Tests: <b id="pTests">0</b></p>
-  <p>Total Questions: <b id="pQuestions">0</b></p>
-  <p>Best Accuracy: <b id="pBest">0%</b></p>
-</div>
-
-<!-- ========== HISTORY (NEW) ========== -->
-<div id="history" class="card hidden">
-  <div class="header">📜 Test History</div>
-  <table>
-    <thead>
-      <tr><th>Date</th><th>Test</th><th>Accuracy</th></tr>
-    </thead>
-    <tbody id="historyTable"></tbody>
-  </table>
-</div>
-
-<!-- ========== ANALYSIS (NEW) ========== -->
-<div id="analysisPanel" class="card hidden">
-  <div class="header">📊 Analysis</div>
-  <p>Best Accuracy Ever: <b id="aBest">–</b></p>
-</div>
-
-<!-- ========== SETTINGS (NEW) ========== -->
-<div id="settings" class="card hidden">
-  <div class="header">⚙️ Settings</div>
-  <button onclick="setTheme('dark')">🌙 Dark</button>
-  <button onclick="setTheme('light')">☀️ Light</button>
-  <button onclick="setTheme('system')">🖥 System</button>
-</div>
-
-<!-- ================= YOUR CALCULATOR (100% ORIGINAL) ================= -->
-<!-- NOTHING BELOW THIS LINE IS MODIFIED -->
+<!-- ORIGINAL CONTENT CONTINUES -->
+<!-- (your calculator UI exactly as provided) -->
+<!-- ================= ORIGINAL CONTENT CONTINUES (UNCHANGED) ================= -->
 
 <!-- CONFIG PAGE -->
 <div id="config">
@@ -158,6 +186,7 @@ th,td{
   <div class="sub">⚙ Configure Your Practice Session</div>
 
   <div class="card">
+
     <div class="field">
       <label class="label">Test Name</label>
       <input id="testName" placeholder="e.g., Morning Practice">
@@ -202,6 +231,7 @@ th,td{
         <label class="label">Digits for First Number</label>
         <input id="digits1" type="number" value="2" min="1">
       </div>
+
       <div class="field">
         <label class="label">Digits for Second Number</label>
         <input id="digits2" type="number" value="2" min="1">
@@ -214,70 +244,203 @@ th,td{
     </div>
 
     <button onclick="startTest()">Start Practice</button>
+
   </div>
+</div>
+
+<!-- TEST PAGE -->
+<div id="test" class="hidden">
+  <div class="test-top">
+    <div># Question <span id="qno">1</span></div>
+    <div>⏱ <span id="time">0</span>s</div>
+  </div>
+
+  <div class="progress"><div id="bar"></div></div>
+
+  <div class="question-box" id="question"></div>
+
+  <input class="answer" id="answer" placeholder="Your answer">
+
+  <div class="submit-row">
+    <button class="submit" onclick="submit()">Submit →</button>
+    <button class="end-btn" onclick="finish()">■</button>
+  </div>
+</div>
+
+<!-- ANALYSIS PAGE -->
+<div id="analysis" class="hidden">
+  <div class="header">🖩 <span id="anName"></span></div>
+  <div class="sub"><span id="anMeta"></span></div>
+
+  <div class="stats">
+    <div class="stat"><h2 id="acc"></h2><p>Accuracy</p></div>
+    <div class="stat"><h2 id="cor"></h2><p>Correct</p></div>
+    <div class="stat"><h2 id="avg"></h2><p>Avg Time</p></div>
+    <div class="stat"><h2 id="fast"></h2><p>Fastest</p></div>
+    <div class="stat"><h2 id="slow"></h2><p>Slowest</p></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Question</th><th>Your</th>
+        <th>Correct</th><th>Time</th><th>Result</th>
+      </tr>
+    </thead>
+    <tbody id="table"></tbody>
+  </table>
 </div>
 
 </div>
 
 <script>
-/* ================= SIDEBAR LOGIC ================= */
-hubToggle.onclick = () => hub.classList.toggle("open");
+/* ================= ORIGINAL CALCULATOR JS (UNCHANGED) ================= */
 
-document.querySelectorAll(".hub-item").forEach(item=>{
-  item.onclick = ()=>{
-    ["config","profile","history","analysisPanel","settings"]
-      .forEach(id=>document.getElementById(id).classList.add("hidden"));
-    document.getElementById(item.dataset.target).classList.remove("hidden");
-    hub.classList.remove("open");
-    renderData();
-  };
-});
+let q=0,total=0,correct=0,timer,sec=0,log=[];
+const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
 
-/* ================= THEME ================= */
-function setTheme(mode){
-  if(mode==="system"){
-    document.documentElement.removeAttribute("data-theme");
-    localStorage.removeItem("theme");
-  }else{
-    document.documentElement.setAttribute("data-theme",mode);
-    localStorage.setItem("theme",mode);
-  }
+function startTimer(){
+  clearInterval(timer);
+  sec=0;
+  time.textContent=0;
+  timer=setInterval(()=>time.textContent=++sec,1000);
 }
-const savedTheme=localStorage.getItem("theme");
-if(savedTheme) document.documentElement.setAttribute("data-theme",savedTheme);
 
-/* ================= STORAGE ================= */
-let tests = JSON.parse(localStorage.getItem("speedDigitsTests")||"[]");
+function gen(){
+  let op=operation.value;
+  let r=range.value.trim(), min1, max1;
 
-/* ================= HOOK INTO YOUR TEST FINISH ================= */
-const originalFinish = finish;
-finish = function(){
-  originalFinish();
+  if(r && r.includes('-')){
+    [min1,max1]=r.split('-').map(Number);
+    if(isNaN(min1)||isNaN(max1)){min1=10;max1=99;}
+  }else{
+    min1=10**(digits1.value-1);
+    max1=10**digits1.value-1;
+  }
 
-  tests.push({
-    date:new Date().toLocaleDateString(),
-    name:testName.value||"Practice",
-    acc:((correct/total)*100).toFixed(1),
-    questions:total
+  let a=rand(min1,max1);
+  let min2=10**(digits2.value-1);
+  let max2=10**digits2.value-1;
+  let b=rand(min2,max2);
+
+  let ans,text;
+  if(op==="add"){ans=a+b;text=`${a} + ${b}`;}
+  if(op==="sub"){ans=a-b;text=`${a} − ${b}`;}
+  if(op==="mul"){ans=a*b;text=`${a} × ${b}`;}
+  if(op==="div"){ans=+(a/b).toFixed(2);text=`${a} ÷ ${b}`;}
+  if(op==="square"){ans=a*a;text=`${a}²`;}
+  if(op==="cube"){ans=a*a*a;text=`${a}³`;}
+  if(op==="last1"){ans=(a*b)%10;text=`${a} × ${b} (last digit)`;}
+  if(op==="last2"){ans=(a*b)%100;text=`${a} × ${b} (last 2 digits)`;}
+
+  question.textContent=text;
+  question.dataset.ans=ans;
+  startTimer();
+}
+
+function startTest(){
+  total=+questions.value||10;
+  config.classList.add("hidden");
+  test.classList.remove("hidden");
+  q=0; correct=0; log=[];
+  gen();
+}
+
+function submit(){
+  let your=answer.value.trim();
+  let cor=question.dataset.ans;
+  let ok=your==cor;
+
+  question.classList.remove("blink-green","blink-red");
+  void question.offsetWidth;
+  question.classList.add(ok?"blink-green":"blink-red");
+
+  if(ok)correct++;
+  log.push({q:question.textContent,y:your,c:cor,t:sec,ok});
+
+  answer.value="";
+  q++;
+  bar.style.width=(q/total*100)+"%";
+  qno.textContent=q+1;
+
+  q<total?gen():finish();
+}
+
+answer.addEventListener("keydown",e=>e.key==="Enter"&&submit());
+
+function finish(){
+  clearInterval(timer);
+  test.classList.add("hidden");
+  analysis.classList.remove("hidden");
+
+  anName.textContent=testName.value||"Practice Test";
+  anMeta.textContent=`${operation.value} • ${difficulty.value} • ${new Date().toLocaleString()}`;
+
+  acc.textContent=((correct/total)*100).toFixed(1)+"%";
+  cor.textContent=`${correct}/${total}`;
+  avg.textContent=(log.reduce((a,b)=>a+b.t,0)/total).toFixed(2)+"s";
+  fast.textContent=Math.min(...log.map(x=>x.t))+"s";
+  slow.textContent=Math.max(...log.map(x=>x.t))+"s";
+
+  table.innerHTML="";
+  log.forEach((r,i)=>{
+    table.innerHTML+=`<tr class="${r.ok?"correct":"wrong"}">
+      <td>${i+1}</td><td>${r.q}</td><td>${r.y}</td>
+      <td>${r.c}</td><td>${r.t}s</td><td>${r.ok?"✔":"✖"}</td>
+    </tr>`;
   });
+}
 
-  localStorage.setItem("speedDigitsTests",JSON.stringify(tests));
+/* ================= SIDEBAR JS (ADDED SAFELY) ================= */
+
+/* TOGGLE */
+sdSidebarToggle.onclick=()=>sdSidebar.classList.toggle("open");
+
+/* PROFILE */
+function sdSaveProfile(){
+  localStorage.setItem("sdProfile",JSON.stringify({
+    name:sdName.value,
+    age:sdAge.value,
+    class:sdClass.value,
+    bio:sdBio.value,
+    img:sdPreview.src
+  }));
+  alert("Profile saved");
+}
+
+sdImage.onchange=()=>{
+  const r=new FileReader();
+  r.onload=()=>sdPreview.src=r.result;
+  r.readAsDataURL(sdImage.files[0]);
 };
 
-/* ================= RENDER PROFILE / HISTORY ================= */
-function renderData(){
-  if(!tests.length) return;
+const p=JSON.parse(localStorage.getItem("sdProfile")||"{}");
+if(p.name)sdName.value=p.name;
+if(p.age)sdAge.value=p.age;
+if(p.class)sdClass.value=p.class;
+if(p.bio)sdBio.value=p.bio;
+if(p.img)sdPreview.src=p.img;
 
-  pTests.textContent=tests.length;
-  pQuestions.textContent=tests.reduce((a,b)=>a+Number(b.questions),0);
-  pBest.textContent=Math.max(...tests.map(t=>t.acc))+"%";
-  aBest.textContent=pBest.textContent;
-
-  historyTable.innerHTML="";
-  tests.forEach(t=>{
-    historyTable.innerHTML+=
-      `<tr><td>${t.date}</td><td>${t.name}</td><td>${t.acc}%</td></tr>`;
+/* HISTORY */
+const _finish=finish;
+finish=function(){
+  _finish();
+  const h=JSON.parse(localStorage.getItem("sdHistory")||"[]");
+  h.push({
+    date:new Date().toLocaleString(),
+    test:testName.value||"Practice",
+    score:`${correct}/${total}`
   });
+  localStorage.setItem("sdHistory",JSON.stringify(h));
+  sdHistory.innerHTML=h.map(x=>`<div class="sd-history-item">${x.test}<br>${x.date}<br>${x.score}</div>`).reverse().join("");
+};
+
+/* RESET */
+function sdResetAll(){
+  if(confirm("Delete ALL data?")){
+    localStorage.clear();
+    location.reload();
+  }
 }
 </script>
 
